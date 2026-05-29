@@ -3,18 +3,18 @@
     "id": 1,
     "title": "Eksplorasi Luar Angkasa",
     "desc": "Poster desain retro tentang perjalanan ke Mars.",
-    "photo": "/images/poster-1.jpg"
+    "photo": "/images/poster-1.jpeg"
   },
   {
     "id": 2,
     "title": "Konser Musik Indie",
     "desc": "Desain tipografi brutalist untuk acara musik lokal.",
-    "photo": "/images/poster-2.jpg"
+    "photo": "/images/poster-2.jpeg"
   },
   {
     "id": 3,
     "title": "Kampanye Lingkungan",
     "desc": "Ilustrasi minimalis tentang pentingnya menjaga hutan.",
-    "photo": "/images/poster-3.jpg"
+    "photo": "/images/poster-3.jpeg"
   }
 ]
