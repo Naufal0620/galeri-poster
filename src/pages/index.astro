@@ -3,29 +3,43 @@ import Layout from '../layouts/Layout.astro';
 import posterData from '../data/posters.json';
 ---
 
-<Layout title="Galeri Poster - Beranda">
-  <main class="max-w-6xl mx-auto px-4 py-8">
+<Layout title="Galeri Poster - Kurasi Visual Modern">
+  <main class="max-w-7xl mx-auto px-6 py-16 md:py-24">
 
-    <header class="text-center mb-12">
-      <h1 class="text-4xl font-bold tracking-tight mb-2">Koleksi Poster</h1>
-      <p class="text-gray-600">Eksplorasi karya visual tanpa batas.</p>
+    <header class="max-w-2xl mb-16 md:mb-24">
+      <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-slate-900">
+        Koleksi <span class="text-slate-400 font-light italic">Poster</span>
+      </h1>
+      <p class="text-xl text-slate-500 leading-relaxed font-light">
+        Kurasi karya visual pilihan dengan estetika modern dan minimalis untuk inspirasi desain tanpa batas.
+      </p>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
       {posterData.map((poster) => (
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
-          <div class="aspect-[3/4] overflow-hidden bg-gray-100">
-            <img 
-              src={poster.photo || '/images/no_image_A4.png'} 
-              alt={poster.title} 
-              class="w-full h-full object-cover"
-              loading="lazy" 
-              onerror="this.onerror=null; this.src='/images/no_image_A4.png';"
-            />
+        <div class="group cursor-pointer">
+          <div class="relative aspect-[3/4] overflow-hidden bg-slate-200 rounded-sm shadow-sm transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:-translate-y-1">
+            <a 
+              href={poster.photo || '/images/no_image_A4.png'} 
+              data-pswp-width="1000" 
+              data-pswp-height="1414" 
+              target="_blank"
+              class="block w-full h-full"
+            >
+              <img 
+                src={poster.photo || '/images/no_image_A4.png'} 
+                alt={poster.title} 
+                class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                loading="lazy" 
+                onerror="this.onerror=null; this.src='/images/no_image_A4.png';"
+              />
+              <div class="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/5 transition-colors duration-500"></div>
+            </a>
           </div>
-          <div class="p-5">
-            <h2 class="text-xl font-semibold mb-2">{poster.title}</h2>
-            <p class="text-gray-600 text-sm leading-relaxed">{poster.desc}</p>
+          <div class="mt-8">
+            <h2 class="text-sm font-semibold tracking-widest uppercase text-slate-400 mb-2">{poster.id.toString().padStart(2, '0')}</h2>
+            <h3 class="text-2xl font-medium text-slate-900 mb-3">{poster.title}</h3>
+            <p class="text-slate-500 font-light leading-relaxed">{poster.desc}</p>
           </div>
         </div>
       ))}
@@ -33,3 +47,31 @@ import posterData from '../data/posters.json';
 
   </main>
 </Layout>
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#gallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+    // Styling customization for minimalist look
+    padding: { top: 40, bottom: 40, left: 20, right: 20 },
+  });
+
+  lightbox.init();
+</script>
+
+<style>
+  /* Optional: refine the PhotoSwipe UI to be even more minimal */
+  :root {
+    --pswp-bg: rgba(255, 255, 255, 0.98);
+    --pswp-placeholder-bg: #f1f5f9;
+  }
+
+  .pswp__button--arrow--prev,
+  .pswp__button--arrow--next {
+    background: none !important;
+  }
+</style>
