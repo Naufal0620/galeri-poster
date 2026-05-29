@@ -1,41 +1,35 @@
 ---
-// Ini adalah area Frontmatter Astro (berjalan di server saat build)
+import Layout from '../layouts/Layout.astro';
 import posterData from '../data/posters.json';
 ---
 
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Galeri Posterku</title>
-  </head>
-  <body class="bg-gray-50 text-gray-900 min-h-screen">
-    <main class="max-w-6xl mx-auto px-4 py-8">
-      
-      <header class="text-center mb-12">
-        <h1 class="text-4xl font-bold tracking-tight mb-2">Koleksi Poster</h1>
-        <p class="text-gray-600">Eksplorasi karya visual tanpa batas.</p>
-      </header>
+<Layout title="Galeri Poster - Beranda">
+  <main class="max-w-6xl mx-auto px-4 py-8">
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posterData.map((poster) => (
-          <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
-            <div class="aspect-[3/4] overflow-hidden bg-gray-100">
-              <img 
-                src={poster.photo} 
-                alt={poster.title} 
-                class="w-full h-full object-cover"
-                loading="lazy" 
-              />
-            </div>
-            <div class="p-5">
-              <h2 class="text-xl font-semibold mb-2">{poster.title}</h2>
-              <p class="text-gray-600 text-sm leading-relaxed">{poster.desc}</p>
-            </div>
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold tracking-tight mb-2">Koleksi Poster</h1>
+      <p class="text-gray-600">Eksplorasi karya visual tanpa batas.</p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posterData.map((poster) => (
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="aspect-[3/4] overflow-hidden bg-gray-100">
+            <img 
+              src={poster.photo || '/images/no_image_A4.png'} 
+              alt={poster.title} 
+              class="w-full h-full object-cover"
+              loading="lazy" 
+              onerror="this.onerror=null; this.src='/images/no_image_A4.png';"
+            />
           </div>
-        ))}
-      </div>
+          <div class="p-5">
+            <h2 class="text-xl font-semibold mb-2">{poster.title}</h2>
+            <p class="text-gray-600 text-sm leading-relaxed">{poster.desc}</p>
+          </div>
+        </div>
+      ))}
+    </div>
 
-    </main>
-  </body>
-</html>
+  </main>
+</Layout>
