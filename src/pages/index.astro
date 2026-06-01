@@ -38,7 +38,7 @@ import galleryData from '../data/gallery.json';
               </div>
             )}
 
-            {item.type === 'infografis' ? (
+            {item.type === 'poster' || item.type === 'infografis' ? (
               <a 
                 href={item.photo || '/images/no_image_A4.png'} 
                 data-pswp-width="1000" 
@@ -79,6 +79,7 @@ import galleryData from '../data/gallery.json';
               {item.id.toString().padStart(2, '0')} — {item.type}
             </h2>
             <h3 class="text-2xl font-medium text-slate-900 mb-3">{item.title}</h3>
+            <p class="text-slate-500 font-light leading-relaxed">{item.desc}</p>
           </div>
         </div>
       ))}
@@ -162,7 +163,7 @@ import galleryData from '../data/gallery.json';
     if (groupModal && groupBackdrop && groupContainer) {
       // Start exit animation
       groupBackdrop.classList.add('opacity-0');
-      groupContainer.classList.add('translate-x-full', 'md:translate-x-0', 'md:scale-95', 'md:opacity-0');
+      groupContainer.classList.add('translate-x-full', 'md:scale-95', 'md:opacity-0');
       
       setTimeout(() => {
         groupModal.classList.add('hidden');
@@ -200,14 +201,16 @@ import galleryData from '../data/gallery.json';
 
   const openGroup = (groupData: any) => {
     const titleEl = document.getElementById('group-title');
+    const descEl = document.getElementById('group-desc');
     const contentEl = document.getElementById('group-content');
 
     if (titleEl) titleEl.textContent = groupData.title;
+    if (descEl) descEl.textContent = groupData.desc;
     if (contentEl && groupModal && groupBackdrop && groupContainer) {
       contentEl.innerHTML = groupData.children.map((child: any) => `
         <div class="group/child cursor-pointer group-item-child" data-child='${JSON.stringify(child)}'>
           <div class="relative overflow-hidden bg-slate-200 rounded-sm shadow-sm transition-all duration-500 ease-out group-hover/child:shadow-xl group-hover/child:-translate-y-1 ${child.type === 'flipbook' ? 'aspect-[3/2]' : 'aspect-[3/4]'}">
-            ${child.type === 'infografis' ? `
+            ${child.type === 'poster' || child.type === 'infografis' ? `
               <a href="${child.photo || '/images/no_image_A4.png'}" data-pswp-width="1000" data-pswp-height="1414" target="_blank" class="block w-full h-full">
                 <img src="${child.photo || '/images/no_image_A4.png'}" alt="${child.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover/child:scale-110" />
               </a>
@@ -224,6 +227,7 @@ import galleryData from '../data/gallery.json';
           </div>
           <div class="mt-6">
             <h3 class="text-xl font-medium text-slate-900 mb-2">${child.title}</h3>
+            <p class="text-slate-500 font-light text-sm leading-relaxed">${child.desc}</p>
           </div>
         </div>
       `).join('');
@@ -231,10 +235,12 @@ import galleryData from '../data/gallery.json';
       groupModal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
 
-      // Trigger animations
+      // Trigger animations with double requestAnimationFrame to ensure browser paint
       requestAnimationFrame(() => {
-        groupBackdrop.classList.remove('opacity-0');
-        groupContainer.classList.remove('translate-x-full', 'md:translate-x-0', 'md:scale-95', 'md:opacity-0');
+        requestAnimationFrame(() => {
+          groupBackdrop.classList.remove('opacity-0');
+          groupContainer.classList.remove('translate-x-full', 'md:scale-95', 'md:opacity-0');
+        });
       });
 
       // Re-init PhotoSwipe for the group modal
