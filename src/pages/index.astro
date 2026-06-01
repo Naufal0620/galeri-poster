@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import posterData from '../data/posters.json';
+import galleryData from '../data/gallery.json';
 ---
 
 <Layout title="Galeri Poster - Kurasi Visual Modern">
@@ -8,41 +8,106 @@ import posterData from '../data/posters.json';
 
     <header class="max-w-2xl mb-16 md:mb-24">
       <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-slate-900">
-        Koleksi <span class="text-slate-400 font-light italic">Poster</span>
+        Koleksi <span class="text-slate-400 font-light italic">Karya</span>
       </h1>
       <p class="text-xl text-slate-500 leading-relaxed font-light">
-        Kurasi karya visual pilihan dengan estetika modern dan minimalis untuk inspirasi desain tanpa batas.
+        Kurasi poster, flipbook, dan koleksi tematik dengan estetika modern untuk inspirasi desain tanpa batas.
       </p>
     </header>
 
     <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
-      {posterData.map((poster) => (
-        <div class="group cursor-pointer">
-          <div class="relative aspect-[3/4] overflow-hidden bg-slate-200 rounded-sm shadow-sm transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:-translate-y-1">
-            <a 
-              href={poster.photo || '/images/no_image_A4.png'} 
-              data-pswp-width="1000" 
-              data-pswp-height="1414" 
-              target="_blank"
-              class="block w-full h-full"
-            >
-              <img 
-                src={poster.photo || '/images/no_image_A4.png'} 
-                alt={poster.title} 
-                class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                loading="lazy" 
-                onerror="this.onerror=null; this.src='/images/no_image_A4.png';"
-              />
-              <div class="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/5 transition-colors duration-500"></div>
-            </a>
+      {galleryData.map((item) => (
+        <div class="group cursor-pointer gallery-item" data-type={item.type} data-item={JSON.stringify(item)}>
+          <div class={`relative overflow-hidden bg-slate-200 rounded-sm shadow-sm transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:-translate-y-1 ${item.type === 'flipbook' ? 'aspect-[3/2]' : 'aspect-[3/4]'}`}>
+            
+            {item.type === 'group' && (
+              <div class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase text-slate-900 shadow-sm border border-slate-100">
+                Collection
+              </div>
+            )}
+
+            {item.type === 'poster' ? (
+              <a 
+                href={item.photo || '/images/no_image_A4.png'} 
+                data-pswp-width="1000" 
+                data-pswp-height="1414" 
+                target="_blank"
+                class="block w-full h-full"
+              >
+                <img 
+                  src={item.photo || '/images/no_image_A4.png'} 
+                  alt={item.title} 
+                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  loading="lazy" 
+                />
+                <div class="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/5 transition-colors duration-500"></div>
+              </a>
+            ) : (
+              <button class="block w-full h-full text-left universal-trigger">
+                <img 
+                  src={item.photo || '/images/no_image_A4.png'} 
+                  alt={item.title} 
+                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  loading="lazy" 
+                />
+                <div class="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-500 flex items-center justify-center">
+                  <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-white/90 p-4 rounded-full shadow-lg">
+                    {item.type === 'flipbook' ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-900"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-900"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    )}
+                  </div>
+                </div>
+              </button>
+            )}
           </div>
           <div class="mt-8">
-            <h2 class="text-sm font-semibold tracking-widest uppercase text-slate-400 mb-2">{poster.id.toString().padStart(2, '0')}</h2>
-            <h3 class="text-2xl font-medium text-slate-900 mb-3">{poster.title}</h3>
-            <p class="text-slate-500 font-light leading-relaxed">{poster.desc}</p>
+            <h2 class="text-sm font-semibold tracking-widest uppercase text-slate-400 mb-2">
+              {item.id.toString().padStart(2, '0')} — {item.type}
+            </h2>
+            <h3 class="text-2xl font-medium text-slate-900 mb-3">{item.title}</h3>
+            <p class="text-slate-500 font-light leading-relaxed">{item.desc}</p>
           </div>
         </div>
       ))}
+    </div>
+
+    <!-- Flipbook Modal -->
+    <div id="flipbook-modal" class="fixed inset-0 z-[100] hidden">
+      <div class="absolute inset-0 bg-slate-900/95 backdrop-blur-sm"></div>
+      <div class="absolute inset-0 flex flex-col">
+        <div class="flex justify-end p-4">
+          <button id="close-flipbook" class="text-white hover:text-slate-300 transition-colors p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="flex-1 p-4 md:p-8">
+          <iframe id="flipbook-iframe" src="" class="w-full h-full rounded-lg bg-white" frameborder="0" allowfullscreen allow="clipboard-write"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group Modal -->
+    <div id="group-modal" class="fixed inset-0 z-[90] hidden overflow-y-auto">
+      <div class="fixed inset-0 bg-slate-50/98 backdrop-blur-xl"></div>
+      <div class="relative min-h-screen flex flex-col">
+        <header class="sticky top-0 z-20 bg-slate-50/80 backdrop-blur-md px-6 py-8 md:px-12 flex justify-between items-center border-b border-slate-100">
+          <div>
+            <h2 id="group-title" class="text-3xl font-bold text-slate-900"></h2>
+            <p id="group-desc" class="text-slate-500 font-light mt-1"></p>
+          </div>
+          <button id="close-group" class="bg-slate-900 text-white p-3 rounded-full hover:bg-slate-800 transition-colors shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </header>
+        
+        <div class="flex-1 px-6 py-12 md:px-12 md:py-20">
+          <div id="group-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
+            <!-- Group items will be injected here -->
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -52,26 +117,136 @@ import posterData from '../data/posters.json';
   import PhotoSwipeLightbox from 'photoswipe/lightbox';
   import 'photoswipe/style.css';
 
-  const lightbox = new PhotoSwipeLightbox({
-    gallery: '#gallery',
-    children: 'a',
-    pswpModule: () => import('photoswipe'),
-    // Styling customization for minimalist look
-    padding: { top: 40, bottom: 40, left: 20, right: 20 },
+  // --- PhotoSwipe Setup ---
+  const initLightbox = (selector = '#gallery') => {
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: selector,
+      children: 'a',
+      pswpModule: () => import('photoswipe'),
+      padding: { top: 40, bottom: 40, left: 20, right: 20 },
+    });
+    lightbox.init();
+    return lightbox;
+  };
+
+  initLightbox();
+  let groupLightbox: any = null;
+
+  // --- Modal Logic ---
+  const flipbookModal = document.getElementById('flipbook-modal');
+  const groupModal = document.getElementById('group-modal');
+  const flipbookIframe = document.getElementById('flipbook-iframe') as HTMLIFrameElement;
+  
+  const closeFlipbook = () => {
+    if (flipbookModal && flipbookIframe) {
+      flipbookModal.classList.add('hidden');
+      flipbookIframe.src = '';
+      document.body.style.overflow = '';
+    }
+  };
+
+  const closeGroup = () => {
+    if (groupModal) {
+      groupModal.classList.add('hidden');
+      document.body.style.overflow = '';
+      if (groupLightbox) {
+        groupLightbox.destroy();
+        groupLightbox = null;
+      }
+    }
+  };
+
+  document.getElementById('close-flipbook')?.addEventListener('click', closeFlipbook);
+  document.getElementById('close-group')?.addEventListener('click', closeGroup);
+
+  // --- Universal Trigger Handling ---
+  document.querySelectorAll('.gallery-item').forEach(el => {
+    const trigger = el.querySelector('.universal-trigger');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', () => {
+      const data = JSON.parse(el.getAttribute('data-item') || '{}');
+      
+      if (data.type === 'flipbook') {
+        if (flipbookModal && flipbookIframe) {
+          flipbookIframe.src = data.embedUrl;
+          flipbookModal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+      } else if (data.type === 'group') {
+        openGroup(data);
+      }
+    });
   });
 
-  lightbox.init();
+  const openGroup = (groupData: any) => {
+    const titleEl = document.getElementById('group-title');
+    const descEl = document.getElementById('group-desc');
+    const contentEl = document.getElementById('group-content');
+
+    if (titleEl) titleEl.textContent = groupData.title;
+    if (descEl) descEl.textContent = groupData.desc;
+    if (contentEl && groupModal) {
+      contentEl.innerHTML = groupData.children.map((child: any) => `
+        <div class="group/child cursor-pointer group-item-child" data-child='${JSON.stringify(child)}'>
+          <div class="relative overflow-hidden bg-slate-200 rounded-sm shadow-sm transition-all duration-500 ease-out group-hover/child:shadow-xl group-hover/child:-translate-y-1 ${child.type === 'flipbook' ? 'aspect-[3/2]' : 'aspect-[3/4]'}">
+            ${child.type === 'poster' ? `
+              <a href="${child.photo || '/images/no_image_A4.png'}" data-pswp-width="1000" data-pswp-height="1414" target="_blank" class="block w-full h-full">
+                <img src="${child.photo || '/images/no_image_A4.png'}" alt="${child.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover/child:scale-110" />
+              </a>
+            ` : `
+              <button class="block w-full h-full text-left child-trigger">
+                <img src="${child.photo || '/images/no_image_A4.png'}" alt="${child.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover/child:scale-110" />
+                <div class="absolute inset-0 bg-slate-900/0 group-hover/child:bg-slate-900/10 transition-colors flex items-center justify-center">
+                  <div class="opacity-0 group-hover/child:opacity-100 bg-white/90 p-4 rounded-full shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-900"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                  </div>
+                </div>
+              </button>
+            `}
+          </div>
+          <div class="mt-6">
+            <h3 class="text-xl font-medium text-slate-900 mb-2">${child.title}</h3>
+            <p class="text-slate-500 font-light text-sm leading-relaxed">${child.desc}</p>
+          </div>
+        </div>
+      `).join('');
+
+      groupModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      // Re-init PhotoSwipe for the group modal
+      groupLightbox = initLightbox('#group-content');
+
+      // Add flipbook triggers for children
+      contentEl.querySelectorAll('.child-trigger').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const childDiv = (btn.closest('.group-item-child') as HTMLElement);
+          const childData = JSON.parse(childDiv.getAttribute('data-child') || '{}');
+          if (childData.type === 'flipbook') {
+            if (flipbookModal && flipbookIframe) {
+              flipbookIframe.src = childData.embedUrl;
+              flipbookModal.classList.remove('hidden');
+            }
+          }
+        });
+      });
+    }
+  };
+
+  // Close on ESC
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeFlipbook();
+      closeGroup();
+    }
+  });
 </script>
 
 <style>
-  /* Optional: refine the PhotoSwipe UI to be even more minimal */
   :root {
     --pswp-bg: rgba(255, 255, 255, 0.98);
     --pswp-placeholder-bg: #f1f5f9;
   }
-
-  .pswp__button--arrow--prev,
-  .pswp__button--arrow--next {
-    background: none !important;
-  }
+  .pswp__button--arrow--prev, .pswp__button--arrow--next { background: none !important; }
 </style>
