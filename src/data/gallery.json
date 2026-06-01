@@ -1,65 +1,56 @@
 [
   {
     "id": 1,
-    "type": "poster",
+    "type": "infografis",
     "title": "Hakekat Konsep Dasar IPS",
-    "desc": "Poster hakekat konsep dasar IPS.",
     "photo": "/images/poster-1.jpeg"
   },
   {
     "id": 2,
-    "type": "poster",
+    "type": "infografis",
     "title": "Fakta, Konsep, dan Generalisasi",
-    "desc": "Poster fakta, konsep dan generalisasi.",
     "photo": "/images/poster-2.jpeg"
   },
   {
     "id": 3,
-    "type": "poster",
+    "type": "infografis",
     "title": "Ruang Lingkup Konsep Sosiologi",
-    "desc": "Poster ruang lingkup konsep sosiologi.",
     "photo": "/images/poster-3.jpeg"
   },
   {
     "id": 4,
-    "type": "poster",
-    "title": "Ekonomi dalam Kehidupan Sehari-hari",
-    "desc": "Poster ekonomi dalam kehidupan sehari-hari.",
+    "type": "infografis",
+    "title": "Ekonomi: Ekonomi dalam Kehidupan Sehari-hari",
     "photo": "/images/poster-4.jpeg"
   },
   {
     "id": 5,
     "type": "group",
-    "title": "Mengapa Sejarah Penting?",
-    "desc": "Materi sejarah.",
+    "title": "Sejarah: Mengapa Sejarah Penting?",
     "photo": "/images/poster-5-1.jpeg",
     "children": [
       {
         "id": 51,
-        "type": "poster",
+        "type": "infografis",
         "title": "Kajian Sejarah Dalam Konsep Dasar IPS",
-        "desc": "Poster kajian sejarah dalam konsep dasar IPS.",
         "photo": "/images/poster-5-1.jpeg"
       },
       {
         "id": 52,
-        "type": "poster",
+        "type": "infografis",
         "title": "Proklamasi Kemerdekaan Indonesia",
-        "desc": "Poster proklamasi kemerdekaan indonesia.",
         "photo": "/images/poster-5-2.jpeg"
       },
       {
         "id": 53,
-        "type": "poster",
+        "type": "infografis",
         "title": "Meningkatkan Literasi IPS Bagi Calon Guru SD",
-        "desc": "Sejarah singkat pergerakan nasional indonesia.",
         "photo": "/images/poster-5-3.jpeg"
       },
       {
         "id": 54,
         "type": "flipbook",
-        "title": "Flipbook Perspektif",
-        "desc": "Versi interaktif dari materi perspektif sosial.",
+        "title": "Menelusuri Jejak Sejarah Suku Batak Lewat Komik",
         "photo": "/images/flipbook.png",
         "embedUrl": "https://heyzine.com/flip-book/e243c38d74.html"
       }
@@ -67,16 +58,14 @@
   },
   {
     "id": 6,
-    "type": "poster",
+    "type": "infografis",
     "title": "Geografi: Memahami Hubungan Manusia dan Lingkungan",
-    "desc": "Poster geografi.",
     "photo": "/images/poster-6.jpeg"
   },
   {
     "id": 7,
-    "type": "poster",
+    "type": "infografis",
     "title": "Antropologi: Memahami Budaya dan Keberagaman Manusia",
-    "desc": "Poster antropologi.",
     "photo": "/images/poster-7.jpeg"
   }
 ]

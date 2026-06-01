@@ -3,16 +3,28 @@ import Layout from '../layouts/Layout.astro';
 import galleryData from '../data/gallery.json';
 ---
 
-<Layout title="Galeri Poster - Kurasi Visual Modern">
+<Layout title="Galeri Infografis - Kurasi Visual Modern">
   <main class="max-w-7xl mx-auto px-6 py-16 md:py-24">
 
-    <header class="max-w-2xl mb-16 md:mb-24">
-      <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-slate-900">
-        Koleksi <span class="text-slate-400 font-light italic">Karya</span>
-      </h1>
-      <p class="text-xl text-slate-500 leading-relaxed font-light">
-        Kurasi poster, flipbook, dan koleksi tematik dengan estetika modern untuk inspirasi desain tanpa batas.
-      </p>
+    <header class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-24 gap-8">
+      <div class="max-w-2xl">
+        <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-slate-900">
+          IPS <span class="text-slate-400 font-light italic">Insight</span>
+        </h1>
+        <p class="text-xl text-slate-500 leading-relaxed font-light">
+          Media Literasi Konsep Dasar IPS Berbasis Infografis.
+        </p>
+      </div>
+      
+      <a 
+        href="https://forms.gle/qaxoTmaaV9uUzJdw5" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-full font-medium transition-all hover:bg-slate-800 hover:shadow-lg active:scale-95 w-fit"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Evaluasi Website
+      </a>
     </header>
 
     <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
@@ -26,7 +38,7 @@ import galleryData from '../data/gallery.json';
               </div>
             )}
 
-            {item.type === 'poster' ? (
+            {item.type === 'infografis' ? (
               <a 
                 href={item.photo || '/images/no_image_A4.png'} 
                 data-pswp-width="1000" 
@@ -67,7 +79,6 @@ import galleryData from '../data/gallery.json';
               {item.id.toString().padStart(2, '0')} — {item.type}
             </h2>
             <h3 class="text-2xl font-medium text-slate-900 mb-3">{item.title}</h3>
-            <p class="text-slate-500 font-light leading-relaxed">{item.desc}</p>
           </div>
         </div>
       ))}
@@ -90,14 +101,14 @@ import galleryData from '../data/gallery.json';
 
     <!-- Group Modal -->
     <div id="group-modal" class="fixed inset-0 z-[90] hidden overflow-y-auto">
-      <div class="fixed inset-0 bg-slate-50/98 backdrop-blur-xl"></div>
-      <div class="relative min-h-screen flex flex-col">
+      <div class="fixed inset-0 bg-slate-50/98 backdrop-blur-xl opacity-0 transition-opacity duration-500" id="group-backdrop"></div>
+      <div class="relative min-h-screen flex flex-col translate-x-full md:translate-x-0 md:scale-95 md:opacity-0 transition-all duration-500 ease-out" id="group-container">
         <header class="sticky top-0 z-20 bg-slate-50/80 backdrop-blur-md px-6 py-8 md:px-12 flex justify-between items-center border-b border-slate-100">
           <div>
             <h2 id="group-title" class="text-3xl font-bold text-slate-900"></h2>
             <p id="group-desc" class="text-slate-500 font-light mt-1"></p>
           </div>
-          <button id="close-group" class="bg-slate-900 text-white p-3 rounded-full hover:bg-slate-800 transition-colors shadow-lg">
+          <button id="close-group" class="bg-slate-900 text-white p-3 rounded-full hover:bg-slate-800 transition-colors shadow-lg active:scale-95">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         </header>
@@ -135,6 +146,8 @@ import galleryData from '../data/gallery.json';
   // --- Modal Logic ---
   const flipbookModal = document.getElementById('flipbook-modal');
   const groupModal = document.getElementById('group-modal');
+  const groupBackdrop = document.getElementById('group-backdrop');
+  const groupContainer = document.getElementById('group-container');
   const flipbookIframe = document.getElementById('flipbook-iframe') as HTMLIFrameElement;
   
   const closeFlipbook = () => {
@@ -146,13 +159,19 @@ import galleryData from '../data/gallery.json';
   };
 
   const closeGroup = () => {
-    if (groupModal) {
-      groupModal.classList.add('hidden');
-      document.body.style.overflow = '';
-      if (groupLightbox) {
-        groupLightbox.destroy();
-        groupLightbox = null;
-      }
+    if (groupModal && groupBackdrop && groupContainer) {
+      // Start exit animation
+      groupBackdrop.classList.add('opacity-0');
+      groupContainer.classList.add('translate-x-full', 'md:translate-x-0', 'md:scale-95', 'md:opacity-0');
+      
+      setTimeout(() => {
+        groupModal.classList.add('hidden');
+        document.body.style.overflow = '';
+        if (groupLightbox) {
+          groupLightbox.destroy();
+          groupLightbox = null;
+        }
+      }, 500); // Wait for transition
     }
   };
 
@@ -181,16 +200,14 @@ import galleryData from '../data/gallery.json';
 
   const openGroup = (groupData: any) => {
     const titleEl = document.getElementById('group-title');
-    const descEl = document.getElementById('group-desc');
     const contentEl = document.getElementById('group-content');
 
     if (titleEl) titleEl.textContent = groupData.title;
-    if (descEl) descEl.textContent = groupData.desc;
-    if (contentEl && groupModal) {
+    if (contentEl && groupModal && groupBackdrop && groupContainer) {
       contentEl.innerHTML = groupData.children.map((child: any) => `
         <div class="group/child cursor-pointer group-item-child" data-child='${JSON.stringify(child)}'>
           <div class="relative overflow-hidden bg-slate-200 rounded-sm shadow-sm transition-all duration-500 ease-out group-hover/child:shadow-xl group-hover/child:-translate-y-1 ${child.type === 'flipbook' ? 'aspect-[3/2]' : 'aspect-[3/4]'}">
-            ${child.type === 'poster' ? `
+            ${child.type === 'infografis' ? `
               <a href="${child.photo || '/images/no_image_A4.png'}" data-pswp-width="1000" data-pswp-height="1414" target="_blank" class="block w-full h-full">
                 <img src="${child.photo || '/images/no_image_A4.png'}" alt="${child.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover/child:scale-110" />
               </a>
@@ -207,13 +224,18 @@ import galleryData from '../data/gallery.json';
           </div>
           <div class="mt-6">
             <h3 class="text-xl font-medium text-slate-900 mb-2">${child.title}</h3>
-            <p class="text-slate-500 font-light text-sm leading-relaxed">${child.desc}</p>
           </div>
         </div>
       `).join('');
 
       groupModal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+
+      // Trigger animations
+      requestAnimationFrame(() => {
+        groupBackdrop.classList.remove('opacity-0');
+        groupContainer.classList.remove('translate-x-full', 'md:translate-x-0', 'md:scale-95', 'md:opacity-0');
+      });
 
       // Re-init PhotoSwipe for the group modal
       groupLightbox = initLightbox('#group-content');
